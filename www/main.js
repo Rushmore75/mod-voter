@@ -54,6 +54,7 @@ async function loadList() {
 
 }
 
+// deno-lint-ignore no-unused-vars
 function downvote(index) {
     // TODO only allow one vote per mod
     fetch(document.location.origin + "/api/downvote/" + index, {
@@ -66,6 +67,7 @@ function downvote(index) {
     });
 }
 
+// deno-lint-ignore no-unused-vars
 function upvote(index) {
     // TODO only allow one vote per mod
     fetch(document.location.origin + "/api/upvote/" + index, {
@@ -78,6 +80,7 @@ function upvote(index) {
     });
 }
 
+// deno-lint-ignore no-unused-vars
 function submitFunction() {
     const name = document.getElementById("item_name").value;
     const link = document.getElementById("item_link").value;
