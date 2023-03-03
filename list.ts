@@ -33,3 +33,6 @@ export function downvoteItem(item: number) {
     items[item].votes_down++;
 }
 
+export function getItem(item: number) {
+    return JSON.stringify(items[item]);
+}

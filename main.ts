@@ -1,4 +1,4 @@
-import { getAllItems, submitItem, downvoteItem, upvoteItem } from "./list.ts"
+import { getAllItems, submitItem, downvoteItem, upvoteItem, getItem } from "./list.ts"
 import { serve } from "https://deno.land/std@0.178.0/http/server.ts";
     
 export let home_url: URL;
@@ -49,11 +49,17 @@ async function handler(req: Request): Promise<Response> {
         default: {
             switch (url_breakout[3+0]) {
                 case "api": {
-                   if (url_breakout[3+1] == "getlist") {
-                        return new Response(getAllItems(), {
-                            headers: { "content-type": "application/json; charset=utf-8" },
-                        });
-                   }
+                    switch (url_breakout[3+1]) {
+                        case "getlist": {
+                            return new Response(getAllItems(), {
+                                headers: { "content-type": "application/json; charset=utf-8" },
+                            });
+                        }
+                        case "getitem": {
+                            const index = url_breakout[3+2];
+                            return new Response(getItem(Number.parseInt(index)));
+                        }
+                    }
                    break;
                 }
                 default: {

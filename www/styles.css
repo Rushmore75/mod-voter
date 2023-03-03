@@ -45,8 +45,8 @@ button:hover {
     background: white;
     box-shadow: 10px 10px black;
     border-radius: 10px;
-    display: grid;
-    grid-template-columns: auto auto auto;
+    display: flex;
+    flex-wrap: nowrap;
     justify-content: center;
     margin-top: 15px;
 }
@@ -56,6 +56,8 @@ button:hover {
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;
+    /* border-radius: 10px; */
+    background-color: rgb(230, 230, 230);
 }
 
 .list-item:hover > * {
@@ -65,7 +67,7 @@ button:hover {
 .list-item:hover {
     transform: translate(-10px, -5px);
     box-shadow: 20px 15px black;
-    background-color: rgb(200, 200, 200);
+    background-color: rgb(230, 230, 230);
 }
 
 .list-item:hover > .vote {
@@ -78,7 +80,17 @@ button:hover {
     padding-right: 10px;
     width: 100px;
     height: auto;
+    justify-content: center;
 }
+
+.up-count {
+    padding: 5%;
+}
+
+.down-count {
+    padding: 5%; 
+}
+
 
 .list-add {
     background: white;

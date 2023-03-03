@@ -24,8 +24,24 @@ async function loadList() {
                             `<button type="button" class="vote" onclick="upvote(${i})">up</button>`;
                         const down_vote =
                             `<button type="button" class="vote" onclick="downvote(${i})">down</button>`;
+                        
+                        const up_count = document.createElement("p");
+                            up_count.className = "up-count";
+                            up_count.id = "up-count-"+i;
+
+                        const down_count = document.createElement("p");
+                            down_count.className = "down-count";
+                            down_count.id = "down-count-"+i;
+                        getItem(i).then(e => {
+                            e.json().then(j => {
+                                up_count.innerText = j.votes_up;
+                                down_count.innerText = j.votes_down;
+                            })
+                        });
                         // add
+                        element.appendChild(up_count);
                         element.appendChild(content);
+                        element.appendChild(down_count);
                         element.insertAdjacentHTML("afterbegin", up_vote);
                         element.insertAdjacentHTML("beforeend", down_vote);
                         html_list.appendChild(element);
@@ -39,16 +55,26 @@ async function loadList() {
 }
 
 function downvote(index) {
-    console.log("down" + index);
+    // TODO only allow one vote per mod
     fetch(document.location.origin + "/api/downvote/" + index, {
         method: "POST"
+    });
+    getItem(index).then(e => {
+        e.json().then(j => {
+            document.getElementById("down-count-"+index).innerText = j.votes_down;
+        })
     });
 }
 
 function upvote(index) {
-    console.log("up" + index);
+    // TODO only allow one vote per mod
     fetch(document.location.origin + "/api/upvote/" + index, {
         method: "POST"
+    });
+    getItem(index).then(e => {
+        e.json().then(j => {
+          document.getElementById("up-count-"+index).innerText = j.votes_up;
+        })
     });
 }
 
@@ -88,4 +114,11 @@ function validateLink(item) {
 
 function notifyInvalid(item, reason) {
     alert("\"" + item + "\"" + " is invalid." + "\n" + reason);
+}
+
+async function getItem(index) {
+    // Javascript nerfed this function and I don't know why
+    // I can't return the json object from here. The joy of using 
+    // loosely typed ig.
+    return fetch(document.location.origin + "/api/getitem/" + index);
 }
