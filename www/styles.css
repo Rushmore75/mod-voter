@@ -1,0 +1,109 @@
+body {
+    background: rgb(75, 75, 75);
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    border: black;
+    color: white;
+}
+
+h1 {
+    text-shadow: 2px 1px 0px black;
+    text-align: center;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 10px 15px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: white;
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    background-color: rgb(200, 200, 200);
+    padding: 10px 15px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: 400ms;
+}
+
+button:hover {
+    transition: 250ms;
+    animation-name: light-pulse;
+    background-color: rgb(149, 149, 149);
+}
+
+.list-item {
+    transition: 500ms;
+    background: white;
+    box-shadow: 10px 10px black;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.list-item > p { /* only p where parent is .list-item */
+    color: black;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.list-item:hover > * {
+    transition: 250ms;
+}
+
+.list-item:hover {
+    transform: translate(-10px, -5px);
+    box-shadow: 20px 15px black;
+    background-color: rgb(200, 200, 200);
+}
+
+.list-item:hover > .vote {
+    display: inherit;
+}
+
+.vote {
+    display: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100px;
+    height: auto;
+}
+
+.list-add {
+    background: white;
+    box-shadow: 16px 8px black;
+    padding: 6px 6px 6px 6px;
+    animation: rgb-pulse 4s infinite alternate;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+.center-div {
+    max-width: 1100px;
+    margin: auto;
+}
+
+@keyframes rgb-pulse {
+   0% {background-color: rgb(245, 78, 78);} 
+   20% {background-color: rgb(105, 254, 105);} 
+   40% {background-color: rgb(255, 255, 42);} 
+   60% {background-color: rgb(111, 248, 255);} 
+   80% {background-color: rgb(255, 70, 255);}
+   100% {background-color: rgb(245, 78, 78);} 
+}
+
+@keyframes white-pulse {
+    0% { background-color: white; }
+    100% { background-color: rgb(200, 200, 200); }   
+}
