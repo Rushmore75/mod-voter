@@ -16,26 +16,33 @@ async function handler(req: Request): Promise<Response> {
     // http / https 
     // subdomain
     // domain
-    console.log(req.method + " " + req.url)
+    const pack_id = getPackId(req); 
+    console.log(req.method +" "+ req.url +" "+ pack_id);
+
     switch(req.method) {
         case "POST": {
             if (url_breakout[3+0] == "api") {
+
+                if (!pack_id) {
+                    return new Response("Needs pack selected.", { status: 401});
+                }
+
                 switch (url_breakout[3+1]) {
                     case "upvote": {
                         const vote = url_breakout[3+2];
-                        upvoteItem(Number.parseInt(vote));
+                        upvoteItem(Number.parseInt(vote), pack_id);
                         return new Response("", {status:200})
                     }
                     case "downvote": {
                         const vote = url_breakout[3+2];
-                        downvoteItem(Number.parseInt(vote));
+                        downvoteItem(Number.parseInt(vote), pack_id);
                         return new Response("", {status:200})
                     }
                     case "submititem": {
                         const body = await req.formData();
                         const name = body.get("item_name")?.toString() || "";
                         const link = body.get("item_link")?.toString() || "";
-                        submitItem(name, new URL(link));
+                        submitItem(name, new URL(link), pack_id);
                         return Response.redirect(home_url);
                     }
                     default: {
@@ -49,20 +56,27 @@ async function handler(req: Request): Promise<Response> {
         default: {
             switch (url_breakout[3+0]) {
                 case "api": {
+                    
+                    if (!pack_id) {
+                        return new Response("Needs pack selected.", { status: 401});
+                    }
                     switch (url_breakout[3+1]) {
                         case "getlist": {
-                            return new Response(getAllItems(), {
+                            return new Response(getAllItems(pack_id), {
                                 headers: { "content-type": "application/json; charset=utf-8" },
                             });
                         }
                         case "getitem": {
                             const index = url_breakout[3+2];
-                            return new Response(getItem(Number.parseInt(index)));
+                            return new Response(getItem(Number.parseInt(index), pack_id));
                         }
                     }
                    break;
                 }
                 default: {
+                    // if (url_breakout[3].starts == "?pack-id=") {
+                    // // makes packs shareable via link
+                    // }
                     return fileServe(req);
                 }
             }
@@ -101,4 +115,17 @@ async function fileServe(req: Request) {
     const response = new Response(readableStream);
     return response;
 
+}
+
+function getPackId(req: Request): string | undefined {
+    const cookies = req.headers.get("cookie")?.split(';');
+    if(!cookies) {
+        return undefined;
+    }
+    for (const i in cookies) {
+        const parts = cookies[i].split('=');
+        if (parts[0] == "Pack-Id") {
+            return parts[1];
+        } 
+    }
 }

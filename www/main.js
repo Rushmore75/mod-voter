@@ -1,8 +1,13 @@
+const pack_cookie_id = "Pack-Id";
+if (getPackId() == null) {
+    console.log("First Visit, setting cookie.")
+    document.cookie = pack_cookie_id+"=1234;"; // Make this a uuid or something
+}
 
 loadList()
 
-async function loadList() {
-    console.log("loading list");
+
+function loadList() {
     try {       
         // get the current list from the backend
         fetch(document.location.origin + "/api/getlist")
@@ -10,53 +15,29 @@ async function loadList() {
                 const html_list = document.getElementById("list");
                 res.json().then(json => {
                     for (const i in json) {
-                        // the div
-                        const element = document.createElement("div");
-                        element.className = "list-item";
-                        // paragraph
-                        const content = document.createElement("p");
-                        content.innerText = 
-                            json[i].name
-                            +"\n"
-                            + json[i].link;
-                        // vote
-                        const up_vote =
-                            `<button type="button" class="vote" onclick="upvote(${i})">up</button>`;
-                        const down_vote =
-                            `<button type="button" class="vote" onclick="downvote(${i})">down</button>`;
-                        
-                        const up_count = document.createElement("p");
-                            up_count.className = "up-count";
-                            up_count.id = "up-count-"+i;
-
-                        const down_count = document.createElement("p");
-                            down_count.className = "down-count";
-                            down_count.id = "down-count-"+i;
-                        getItem(i).then(e => {
-                            e.json().then(j => {
-                                up_count.innerText = j.votes_up;
-                                down_count.innerText = j.votes_down;
-                            })
-                        });
+                        const up_count = json[i].votes_up;
+                        const down_count = json[i].votes_down;
+                        const item = 
+                            `<div class="list-item"><button type="button" class="vote" onclick="upvote(${i})">up</button>
+                                <p class="up-count" id="up-count-${i}">${up_count}</p>
+                                <p>
+                                    <a href="${json[i].link}">${json[i].name}</a>
+                                </p>
+                                <p class="down-count" id="down-count-${i}">${down_count}</p><button type="button" class="vote" onclick="downvote(${i})">down</button>
+                            </div>`
                         // add
-                        element.appendChild(up_count);
-                        element.appendChild(content);
-                        element.appendChild(down_count);
-                        element.insertAdjacentHTML("afterbegin", up_vote);
-                        element.insertAdjacentHTML("beforeend", down_vote);
-                        html_list.appendChild(element);
+                        html_list.insertAdjacentHTML("beforeend", item);
                     }
                 });
             })
         } catch (e) {
         console.log("api fail" + e);
     }
-
 }
 
 // deno-lint-ignore no-unused-vars
 function downvote(index) {
-    // TODO only allow one vote per mod
+    // TODO only allow one vote per mod>
     fetch(document.location.origin + "/api/downvote/" + index, {
         method: "POST"
     });
@@ -98,6 +79,14 @@ function submitFunction() {
     return true;
 }
 
+function changePack() {
+    const new_id = document.getElementById("pack-id").value;
+    console.log("Changing from pack: "+ getPackId() +" to: "+ new_id);
+    document.cookie = `${pack_cookie_id}=${new_id};`;
+    loadList();
+    // return false; // cancel the form submission.
+}
+
 function validateName(item) {
     // TODO validate 
     return true;
@@ -124,4 +113,14 @@ async function getItem(index) {
     // I can't return the json object from here. The joy of using 
     // loosely typed ig.
     return fetch(document.location.origin + "/api/getitem/" + index);
+}
+
+function getPackId() {
+    const cookies = document.cookie.split(';');
+    for (const i in cookies) {
+        const parts = cookies[i].split('=');
+        if (parts[0] == pack_cookie_id) {
+            return parts[1];
+        } 
+    }
 }

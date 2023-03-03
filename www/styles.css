@@ -40,8 +40,53 @@ button:hover {
     background-color: rgb(149, 149, 149);
 }
 
-.list-item {
+* {
     transition: 500ms;
+}
+
+.header-hint {
+    position: fixed;
+    right: 1%;
+    height: 50px; 
+    width: 50px;
+    border-radius: 25px;
+    margin-right: 100px;
+    animation: white-pulse 4s infinite alternate;
+}
+
+.header-hint:hover {
+    width: 20%;
+    height: 50%;
+    transition: 250ms;
+}
+
+.header-hint:hover > .pseudo-header {
+    display: inherit;
+}
+
+.settings-icon {
+    margin: 0;
+    margin-top: 6.25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: xx-large;
+}
+
+.pseudo-header {
+    display: none;
+    padding: 15px;
+}
+
+.list-add {
+    background: white;
+    box-shadow: 16px 8px black;
+    animation: rgb-pulse 4s infinite alternate;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+.list-item {
     background: white;
     box-shadow: 10px 10px black;
     border-radius: 10px;
@@ -60,7 +105,7 @@ button:hover {
     background-color: rgb(230, 230, 230);
 }
 
-.list-item:hover > * {
+.list-item:hover {
     transition: 250ms;
 }
 
@@ -89,16 +134,6 @@ button:hover {
 
 .down-count {
     padding: 5%; 
-}
-
-
-.list-add {
-    background: white;
-    box-shadow: 16px 8px black;
-    padding: 6px 6px 6px 6px;
-    animation: rgb-pulse 4s infinite alternate;
-    border-radius: 25px;
-    padding: 20px;
 }
 
 .center-div {
