@@ -3,4 +3,4 @@ Let's us vote for mods that we put in our modpakcs. Before we did it with discor
 
 ### TODOs
 - [ ] Discord login, only vote once/item
-- [ ] impl (this)[https://github.com/gorilla-devs/libium] so it auto-gens the pack
+- [ ] impl [this](https://github.com/gorilla-devs/libium) so it auto-gens the pack
