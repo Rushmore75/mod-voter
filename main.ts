@@ -1,5 +1,6 @@
-import { getAllItems, submitItem, downvoteItem, upvoteItem, getItem } from "./list.ts"
+import { submitItem, downvoteItem, upvoteItem } from "./list.ts"
 import { serve } from "https://deno.land/std@0.178.0/http/server.ts";
+import { getAllItemsInPack, getMod } from "./db.ts";
     
 export let home_url: URL;
 
@@ -24,7 +25,7 @@ async function handler(req: Request): Promise<Response> {
             if (url_breakout[3+0] == "api") {
 
                 if (!pack_id) {
-                    return new Response("Needs pack selected.", { status: 401});
+                    return new Response("Needs pack selected.", { status: 401 });
                 }
 
                 switch (url_breakout[3+1]) {
@@ -62,13 +63,17 @@ async function handler(req: Request): Promise<Response> {
                     }
                     switch (url_breakout[3+1]) {
                         case "getlist": {
-                            return new Response(getAllItems(pack_id), {
+                            const items = await getAllItemsInPack(pack_id);
+                            return new Response(JSON.stringify(items), {
                                 headers: { "content-type": "application/json; charset=utf-8" },
                             });
                         }
                         case "getitem": {
                             const index = url_breakout[3+2];
-                            return new Response(getItem(Number.parseInt(index), pack_id));
+                            const item = await getMod(pack_id, Number.parseInt(index))
+                            return new Response(JSON.stringify(item), {
+                                headers: { "content-type": "application/json; charset=utf-8" },
+                            });
                         }
                     }
                    break;
@@ -124,7 +129,7 @@ function getPackId(req: Request): string | undefined {
     }
     for (const i in cookies) {
         const parts = cookies[i].split('=');
-        if (parts[0] == "Pack-Id") {
+        if (parts[0].trim() == "Pack-Id") {
             return parts[1];
         } 
     }

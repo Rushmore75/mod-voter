@@ -1,11 +1,6 @@
 const pack_cookie_id = "Pack-Id";
-if (getPackId() == null) {
-    console.log("First Visit, setting cookie.")
-    document.cookie = pack_cookie_id+"=1234;"; // Make this a uuid or something
-}
 
 loadList()
-
 
 function loadList() {
     try {       
@@ -81,6 +76,11 @@ function submitFunction() {
 
 function changePack() {
     const new_id = document.getElementById("pack-id").value;
+    // This is because the database is set up for 255 chars
+    if (String(new_id).length >= 255) {
+        alert("Use a shorter name");
+        return false;
+    }
     console.log("Changing from pack: "+ getPackId() +" to: "+ new_id);
     document.cookie = `${pack_cookie_id}=${new_id};`;
     loadList();
