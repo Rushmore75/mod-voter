@@ -104,7 +104,6 @@ async function fileServe(req: Request) {
     // Try opening the file
     let file;
     try {
-        // TODO test path traversal attacks
         file = await Deno.open("./www" + filepath, { read: true });
     } catch {
         // If the file cannot be opened, return a "404 Not Found" response

@@ -52,6 +52,12 @@ function disconnect() {
 }
 
 export async function addPack(id: string) {
+    
+    if (id.length > 255) {
+        new Error("The pack ID is too long! At most can be 255 chars.")
+        return;
+    }
+
     await Pack.create({
         id: id,
     });
@@ -69,34 +75,25 @@ export async function addMod(pack: string, mod: Item) {
     if (!await packExists(pack)) {
         await addPack(pack);
     }
+    // FIXME this isn't selecting anything
+    const next = await Mod
+        .where("pack_id", pack)
+        .orderBy("index", "desc")
+        .select("index")
+        .first();
+    let index = 0;
     try {
-        const next = await Mod
-            .where("pack_id", pack)
-            .orderBy("index", "desc")
-            .select("index")
-            .first();
-            // .get();
-
-        let index = 0;
-
-        // if (next instanceof Model) next = [next];
-        try {
-            if (next.length) {
-                index = Number.parseInt(String(next.index)) + 1;
-            }
-        } catch (_) {/**/}
-                
-        await Mod.create({
-            id: mod.name,
-            mod: JSON.stringify(mod),
-            pack_id: pack,
-            index: index,
-        });
-    } catch (e) {
-        console.error(e);
-        console.error("MOD: "+mod);
-        console.error("PACK: "+pack);
-    }
+        if (next.length) {
+            index = Number.parseInt(String(next.index)) + 1;
+        }
+    } catch (_) {/**/}
+            
+    await Mod.create({
+        id: mod.name,
+        mod: JSON.stringify(mod),
+        pack_id: pack,
+        index: index,
+    });
 }
 
 export async function getMod(pack: string, index: number) {

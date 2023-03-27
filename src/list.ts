@@ -1,5 +1,6 @@
-import { addMod, downvoteMod, getAllItemsInPack, getMod, Mod, upvoteMod } from "./db.ts";
+import { addMod } from "./db.ts";
 
+// deprecate this and just use the pack and mod classes directly
 export class Item {
     name: string;
     link: URL;
