@@ -1,4 +1,3 @@
-
 -- @block
 drop table mods;
 drop table packs;

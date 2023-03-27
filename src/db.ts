@@ -3,7 +3,6 @@ import {
   DataTypes,
   Model,
   PostgresConnector,
-  Relationships,
 } from "https://raw.githubusercontent.com/jerlam06/denodb/master/mod.ts";
 
 import { Item } from "./list.ts";
@@ -29,7 +28,7 @@ export class Mod extends Model {
   }
 }
 
-let db: Database = await connect();
+const db: Database = await connect();
 
 async function connect(): Promise<Database> {
     // TODO read these settings from config file
@@ -72,7 +71,7 @@ export async function addMod(pack: string, mod: Item) {
         await addPack(pack);
     }
     try {
-        let next = await Mod
+        const next = await Mod
             .where("pack_id", pack)
             .orderBy("index", "desc")
             .select("index")
@@ -127,10 +126,25 @@ export async function getAllItemsInPack(pack: string): Promise<any[]> {
     return items;
 }
 
-export async function downvoteMod(index: number, pack: string) {
+export function downvoteMod(index: number, pack: string) {
     getMod(pack, index).then(e => {
         const j = JSON.parse(JSON.stringify(e));
         j.votes_down++;
+        // FIXME this isn't working
+        // and it's not my fault.
+        // But there is probably a
+        // way to make it work.
+        Mod
+            .where("pack_id", pack)
+            .where("index", String(index))
+            .update("mod", j);
+    });
+}
+
+export function upvoteMod(index: number, pack: string) {
+    getMod(pack, index).then(e => {
+        const j = JSON.parse(JSON.stringify(e));
+        j.votes_up++;
         // FIXME this isn't working
         // and it's not my fault.
         // But there is probably a

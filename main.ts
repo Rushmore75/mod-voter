@@ -1,6 +1,6 @@
-import { submitItem, downvoteItem, upvoteItem } from "./list.ts"
+import { submitItem, downvoteItem, upvoteItem } from "./src/list.ts"
 import { serve } from "https://deno.land/std@0.178.0/http/server.ts";
-import { getAllItemsInPack, getMod } from "./db.ts";
+import { getAllItemsInPack, getMod } from "./src/db.ts";
     
 export let home_url: URL;
 
