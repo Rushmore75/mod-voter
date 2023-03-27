@@ -32,7 +32,7 @@ function loadList() {
 
 // deno-lint-ignore no-unused-vars
 function downvote(index) {
-    // TODO only allow one vote per mod>
+    // TODO only allow one vote per mod
     fetch(document.location.origin + "/api/downvote/" + index, {
         method: "POST"
     });

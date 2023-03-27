@@ -8,7 +8,6 @@ create TABLE IF NOT EXISTS packs (
     id TEXT PRIMARY KEY NOT NULL
 );
 
--- @block
 create TABLE IF NOT EXISTS mods (
     id TEXT NOT NULL,
     index INT NOT NULL,

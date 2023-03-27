@@ -1,4 +1,4 @@
-import { addMod, downvoteMod, getAllItemsInPack, getMod, Mod } from "./db.ts";
+import { addMod, downvoteMod, getAllItemsInPack, getMod, Mod, upvoteMod } from "./db.ts";
 
 export class Item {
     name: string;
@@ -18,14 +18,4 @@ export class Item {
 export function submitItem(name: string, link: URL, pack: string) {
     const new_item: Item = new Item(name, link); 
     addMod(pack, new_item);
-}
-
-export function upvoteItem(item: number, pack: string) {
-    // FIXME upvote
-    // items[item].votes_up++;
-}
-export function downvoteItem(item: number, pack: string) {
-    // FIXME downvote
-    downvoteMod(item, pack);
-    // items[item].votes_down++;
 }

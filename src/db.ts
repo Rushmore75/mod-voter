@@ -3,10 +3,9 @@ import {
   DataTypes,
   Model,
   PostgresConnector,
-} from "https://raw.githubusercontent.com/jerlam06/denodb/master/mod.ts";
+} from "https://raw.githubusercontent.com/Rushmore75/denodb/master/mod.ts";
 
 import { Item } from "./list.ts";
-
 
 class Pack extends Model {
   static table = "packs";
@@ -33,10 +32,10 @@ const db: Database = await connect();
 async function connect(): Promise<Database> {
     // TODO read these settings from config file
     const connection = new PostgresConnector({
-        host: "172.17.0.2",
+        host: "172.17.0.3",
         username: "postgres",
         password: "1234",
-        database: "postgres",
+        database: "modpacks",
     });
 
     const db = new Database(connection);
@@ -128,16 +127,13 @@ export async function getAllItemsInPack(pack: string): Promise<any[]> {
 
 export function downvoteMod(index: number, pack: string) {
     getMod(pack, index).then(e => {
+        // This is dumb, ik, but it's the most concise way to do this. (I miss rust)
         const j = JSON.parse(JSON.stringify(e));
         j.votes_down++;
-        // FIXME this isn't working
-        // and it's not my fault.
-        // But there is probably a
-        // way to make it work.
         Mod
             .where("pack_id", pack)
             .where("index", String(index))
-            .update("mod", j);
+            .update("mod", JSON.stringify(j));
     });
 }
 
@@ -145,13 +141,9 @@ export function upvoteMod(index: number, pack: string) {
     getMod(pack, index).then(e => {
         const j = JSON.parse(JSON.stringify(e));
         j.votes_up++;
-        // FIXME this isn't working
-        // and it's not my fault.
-        // But there is probably a
-        // way to make it work.
         Mod
             .where("pack_id", pack)
             .where("index", String(index))
-            .update("mod", j);
+            .update("mod", JSON.stringify(j));
     });
 }

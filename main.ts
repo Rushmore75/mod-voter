@@ -1,6 +1,6 @@
-import { submitItem, downvoteItem, upvoteItem } from "./src/list.ts"
+import { submitItem } from "./src/list.ts"
 import { serve } from "https://deno.land/std@0.178.0/http/server.ts";
-import { getAllItemsInPack, getMod } from "./src/db.ts";
+import { downvoteMod, getAllItemsInPack, getMod, upvoteMod } from "./src/db.ts";
     
 export let home_url: URL;
 
@@ -22,6 +22,7 @@ async function handler(req: Request): Promise<Response> {
 
     switch(req.method) {
         case "POST": {
+            // this could be another switch for cleanliness
             if (url_breakout[3+0] == "api") {
 
                 if (!pack_id) {
@@ -31,12 +32,12 @@ async function handler(req: Request): Promise<Response> {
                 switch (url_breakout[3+1]) {
                     case "upvote": {
                         const vote = url_breakout[3+2];
-                        upvoteItem(Number.parseInt(vote), pack_id);
+                        upvoteMod(Number.parseInt(vote), pack_id);
                         return new Response("", {status:200})
                     }
                     case "downvote": {
                         const vote = url_breakout[3+2];
-                        downvoteItem(Number.parseInt(vote), pack_id);
+                        downvoteMod(Number.parseInt(vote), pack_id);
                         return new Response("", {status:200})
                     }
                     case "submititem": {
